@@ -1,10 +1,14 @@
 package me.dio.copa.catar.features
 
+import android.content.res.Resources.Theme
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +34,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -42,12 +49,53 @@ typealias NotificationOnClick = (match: MatchDomain) -> Unit
 
 @Composable
 fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOnClick) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(matches) { match ->
-                MainInfo(match, onNotificationOnClick)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(18, 18, 20))
+    ) {
+        
+        Box(
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Icon(
+                painter = painterResource(id = me.dio.copa.catar.notification.scheduler.R.drawable.ic_soccer),
+                contentDescription = null,
+                tint = MaterialTheme.colors.primary,
+                modifier = Modifier.size(112.dp)
+                    .align(Alignment.BottomEnd)
+
+
+            )
+            Text(
+                text = "Jogos da Copa",
+                style = MaterialTheme.typography.h3.copy(
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 8f
+                    )
+                ),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = Color.LightGray,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 48.dp)
+            )
+        }
+
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)) {
+
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(matches) { match ->
+                    MainInfo(match, onNotificationOnClick)
+                }
             }
         }
     }
@@ -57,7 +105,9 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
 fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
     Card(
         shape = Shapes.large,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        border = BorderStroke(3.dp, MaterialTheme.colors.primary)
+
     ) {
         Box {
             AsyncImage(
