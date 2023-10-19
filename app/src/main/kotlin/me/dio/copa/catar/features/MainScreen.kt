@@ -1,6 +1,7 @@
 package me.dio.copa.catar.features
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -39,21 +38,23 @@ import me.dio.copa.catar.domain.model.TeamDomain
 import me.dio.copa.catar.extensions.Reverse
 import me.dio.copa.catar.ui.theme.Shapes
 
+typealias NotificationOnClick = (match: MatchDomain) -> Unit
+
 @Composable
-fun MainScreen(matches: List<MatchDomain>) {
+fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOnClick) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(8.dp)) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(matches) { match ->
-                MainInfo(match)
+                MainInfo(match, onNotificationOnClick)
             }
         }
     }
 }
 
 @Composable
-fun MainInfo(match: MatchDomain) {
+fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
     Card(
         shape = Shapes.large,
         modifier = Modifier.fillMaxWidth()
@@ -73,7 +74,7 @@ fun MainInfo(match: MatchDomain) {
             )
 
             Column(modifier = Modifier.padding(16.dp)) {
-                Notification(match)
+                Notification(match, onNotificationOnClick)
                 Title(match)
                 Teams(match)
             }
@@ -82,11 +83,10 @@ fun MainInfo(match: MatchDomain) {
 }
 
 @Composable
-fun Notification(match: MatchDomain) {
+fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
-
     ) {
         val drawable = if (match.notificationEnabled) R.drawable.ic_notifications_active
             else R.drawable.ic_notifications
@@ -94,6 +94,9 @@ fun Notification(match: MatchDomain) {
         Image(
             painter = painterResource(id = drawable),
             contentDescription = null,
+            modifier = Modifier.clickable {
+                onClick(match)
+            }
         )
     }
 }
