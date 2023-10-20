@@ -109,7 +109,7 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxSize()
-                    .offset(x = -49.dp, y = 49.dp)
+                    .offset(x = -(49.dp), y = 49.dp)
                     .alpha(0.3F)
             )
 
