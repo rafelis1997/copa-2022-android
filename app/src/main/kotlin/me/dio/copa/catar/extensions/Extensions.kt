@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import java.util.Locale
 
 fun <T> Flow<T>.observe(owner: LifecycleOwner, observe: (T) -> Unit) {
     owner.lifecycleScope.launch {
@@ -69,4 +70,12 @@ object ReverseArrangement : Arrangement.Horizontal {
         }
     }
 
+}
+
+fun String.capitalized(): String {
+    return this.lowercase().replaceFirstChar {
+        if (it.isLowerCase())
+            it.titlecase(Locale.getDefault())
+        else it.toString()
+    }
 }

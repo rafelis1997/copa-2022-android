@@ -4,16 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityScoped
 import me.dio.copa.catar.extensions.observe
 import me.dio.copa.catar.notification.scheduler.extensions.NotificationMatcherWorker
-import me.dio.copa.catar.ui.theme.Copa2022Theme
 
 @AndroidEntryPoint
 @ActivityScoped
@@ -24,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         observeActions()
         setContent {
-            Copa2022Theme {
+            AppTheme(useDarkTheme = true) {
                 val state by viewModel.state.collectAsState()
                 MainScreen(state.matches, viewModel::toggleNotification)
             }
@@ -43,6 +40,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 }

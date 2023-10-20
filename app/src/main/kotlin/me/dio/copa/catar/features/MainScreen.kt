@@ -1,7 +1,5 @@
 package me.dio.copa.catar.features
 
-import android.content.res.Resources.Theme
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,31 +9,41 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import me.dio.copa.catar.R
@@ -43,6 +51,7 @@ import me.dio.copa.catar.domain.extensions.getDate
 import me.dio.copa.catar.domain.model.MatchDomain
 import me.dio.copa.catar.domain.model.TeamDomain
 import me.dio.copa.catar.extensions.Reverse
+import me.dio.copa.catar.extensions.capitalized
 import me.dio.copa.catar.ui.theme.Shapes
 
 typealias NotificationOnClick = (match: MatchDomain) -> Unit
@@ -52,35 +61,29 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(18, 18, 20))
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
     ) {
         
         Box(
             modifier = Modifier
                 .width(IntrinsicSize.Max)
-                .align(Alignment.CenterHorizontally)
         ) {
-            Icon(
-                painter = painterResource(id = me.dio.copa.catar.notification.scheduler.R.drawable.ic_soccer),
-                contentDescription = null,
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.size(112.dp)
-                    .align(Alignment.BottomEnd)
-
-
-            )
+//            Icon(
+//                painter = painterResource(id = me.dio.copa.catar.notification.scheduler.R.drawable.ic_soccer),
+//                contentDescription = null,
+//                tint = MaterialTheme.colorScheme.primary,
+//                modifier = Modifier.size(112.dp)
+//                    .align(Alignment.BottomEnd)
+//
+//
+//            )
             Text(
-                text = "Jogos da Copa",
-                style = MaterialTheme.typography.h3.copy(
-                    shadow = Shadow(
-                        color = Color.Black,
-                        offset = Offset(4f, 4f),
-                        blurRadius = 8f
-                    )
-                ),
+                text = "Copa do Mundo",
+                style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color = Color.LightGray,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 48.dp)
@@ -88,11 +91,11 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
         }
 
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+       ) {
 
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(matches) { match ->
                     MainInfo(match, onNotificationOnClick)
                 }
@@ -105,28 +108,74 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
 fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
     Card(
         shape = Shapes.large,
-        modifier = Modifier.fillMaxWidth(),
-        border = BorderStroke(3.dp, MaterialTheme.colors.primary)
-
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp),
     ) {
         Box {
-            AsyncImage(
-                model = match.stadium.image,
+            Icon(
+                painter = painterResource(
+                    id = me.dio.copa.catar.notification.scheduler.R.drawable.ic_soccer,
+                ),
+                tint = MaterialTheme.colorScheme.inversePrimary,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.height(160.dp),
-                colorFilter = ColorFilter.tint(
-                    Color(
-                        0.0F, 0.0F, 0.0F, 0.65F, ColorSpaces.AdobeRgb
-                    ),
-                    blendMode = BlendMode.Overlay,
-                )
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxSize()
+                    .offset(x = -49.dp, y = 49.dp)
+                    .alpha(0.3F)
             )
 
-            Column(modifier = Modifier.padding(16.dp)) {
-                Notification(match, onNotificationOnClick)
-                Title(match)
-                Teams(match)
+            Row(
+    //            verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .height(IntrinsicSize.Min)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(0.6F).padding(start = 8.dp)
+                ) {
+                    Teams(match)
+                    Info(match)
+                }
+    
+    
+                Box(
+                    modifier = Modifier.clip(Shapes.copy(medium = RoundedCornerShape(16.dp)).medium)
+                ) {
+                    AsyncImage(
+                        model = match.stadium.image,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.height(160.dp).drawWithCache {
+                            val gradient = Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black),
+                                startY = size.height/3,
+                                endY = size.height
+                            )
+                            onDrawWithContent {
+                                drawContent()
+                                drawRect(gradient,blendMode = BlendMode.Multiply)
+                            }
+                        }
+                    )
+
+                    Text(
+                        text = match.stadium.name,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
+                    )
+    
+                    Notification(match, onNotificationOnClick)
+                }
             }
         }
     }
@@ -135,8 +184,10 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
 @Composable
 fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
         val drawable = if (match.notificationEnabled) R.drawable.ic_notifications_active
             else R.drawable.ic_notifications
@@ -144,30 +195,42 @@ fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
         Image(
             painter = painterResource(id = drawable),
             contentDescription = null,
-            modifier = Modifier.clickable {
-                onClick(match)
-            }
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(4.dp)
+                .clickable {
+                    onClick(match)
+                }
+                .size(24.dp)
         )
     }
 }
 
 @Composable
-fun Title(match: MatchDomain) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+fun Info(match: MatchDomain) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
+        val dateList = match.date.getDate().split(" ")
         Text(
-            text = "${match.date.getDate()} - ${match.name}",
-            style = MaterialTheme.typography.h6.copy(
+            text = "Data: ${dateList[0]}",
+            style = MaterialTheme.typography.titleLarge.copy(
                 color = Color.White,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(4f, 4f),
-                    blurRadius = 8f
-                )
             ),
-            modifier = Modifier
+        )
+        Text(
+            text = "Horário: ${dateList[1]}",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.White,
+            ),
+        )
+        Text(
+            text = "Fase: ${match.name.capitalized()}",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.White,
+            ),
         )
     }
 }
@@ -175,21 +238,17 @@ fun Title(match: MatchDomain) {
 @Composable
 fun Teams(match: MatchDomain) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
     ) {
+
         TeamItem(team = match.team1)
         Text(
             text = "x",
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.h6.copy(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            style = MaterialTheme.typography.titleLarge.copy(
                 color = Color.White,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(4f, 4f),
-                    blurRadius = 8f
-                )
             )
         )
         TeamItem(team = match.team2, invert = true)
@@ -205,28 +264,18 @@ fun TeamItem(team: TeamDomain, invert: Boolean = false) {
         Text(
             text = team.flag,
             modifier = Modifier.align((Alignment.CenterVertically)),
-            style = MaterialTheme.typography.h3.copy(
+            style = MaterialTheme.typography.headlineMedium.copy(
                 color = Color.White,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(4f, 4f),
-                    blurRadius = 8f
-                )
             )
         )
         
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(8.dp))
 
         Text(
             text = team.displayName,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6.copy(
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.titleLarge.copy(
                 color = Color.White,
-                shadow = Shadow(
-                    color = Color.Black,
-                    offset = Offset(4f, 4f),
-                    blurRadius = 8f
-                )
             )
         )
     }
