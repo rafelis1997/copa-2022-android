@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -97,7 +98,6 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
     ) {
         Box {
             Icon(
@@ -107,16 +107,16 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                 tint = MaterialTheme.colorScheme.inversePrimary,
                 contentDescription = null,
                 modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .fillMaxSize()
-                    .offset(x = -(49.dp), y = 49.dp)
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .offset(y = 49.dp)
                     .alpha(0.3F)
             )
 
             Row(
-                //            verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(16.dp)
                     .height(IntrinsicSize.Min)
             ) {
@@ -124,7 +124,7 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth(0.6F)
-                        .padding(start = 8.dp)
+                        .fillMaxHeight()
                 ) {
                     Teams(match)
                     Info(match)
@@ -132,14 +132,15 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
 
 
                 Box(
-                    modifier = Modifier.clip(Shapes.copy(medium = RoundedCornerShape(16.dp)).medium)
+                    modifier = Modifier.fillMaxHeight().clip(Shapes.copy(medium = RoundedCornerShape(16.dp)).medium)
                 ) {
                     AsyncImage(
                         model = match.stadium.image,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .height(160.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.Center)
                             .drawWithCache {
                                 val gradient = Brush.verticalGradient(
                                     colors = listOf(Color.Transparent, Color.Black),
@@ -151,6 +152,7 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                                     drawRect(gradient, blendMode = BlendMode.Multiply)
                                 }
                             }
+
                     )
 
                     Text(
@@ -200,8 +202,8 @@ fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
 @Composable
 fun Info(match: MatchDomain) {
     Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
+        verticalArrangement = Arrangement.Bottom,
+        modifier = Modifier.fillMaxSize(),
     ) {
         val dateList = match.date.getDate().split(" ")
         Text(
@@ -232,7 +234,6 @@ fun Teams(match: MatchDomain) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
     ) {
-
         TeamItem(team = match.team1)
         Text(
             text = "x",
@@ -264,7 +265,7 @@ fun TeamItem(team: TeamDomain, invert: Boolean = false) {
         Text(
             text = team.displayName,
             fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
                 color = Color.White,
             )
         )
