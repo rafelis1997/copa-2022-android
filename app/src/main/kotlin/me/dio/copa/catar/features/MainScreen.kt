@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,19 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import me.dio.copa.catar.R
@@ -69,15 +62,6 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
             modifier = Modifier
                 .width(IntrinsicSize.Max)
         ) {
-//            Icon(
-//                painter = painterResource(id = me.dio.copa.catar.notification.scheduler.R.drawable.ic_soccer),
-//                contentDescription = null,
-//                tint = MaterialTheme.colorScheme.primary,
-//                modifier = Modifier.size(112.dp)
-//                    .align(Alignment.BottomEnd)
-//
-//
-//            )
             Text(
                 text = "Copa do Mundo",
                 style = MaterialTheme.typography.displayMedium,
