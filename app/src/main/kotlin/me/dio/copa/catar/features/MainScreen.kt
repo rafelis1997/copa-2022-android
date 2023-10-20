@@ -57,7 +57,7 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        
+
         Box(
             modifier = Modifier
                 .width(IntrinsicSize.Max)
@@ -77,7 +77,7 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
 
         Box(
             modifier = Modifier.fillMaxSize()
-       ) {
+        ) {
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(matches) { match ->
@@ -114,7 +114,7 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
             )
 
             Row(
-    //            verticalAlignment = Alignment.CenterVertically,
+                //            verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
@@ -122,13 +122,15 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth(0.6F).padding(start = 8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth(0.6F)
+                        .padding(start = 8.dp)
                 ) {
                     Teams(match)
                     Info(match)
                 }
-    
-    
+
+
                 Box(
                     modifier = Modifier.clip(Shapes.copy(medium = RoundedCornerShape(16.dp)).medium)
                 ) {
@@ -136,17 +138,19 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                         model = match.stadium.image,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(160.dp).drawWithCache {
-                            val gradient = Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color.Black),
-                                startY = size.height/3,
-                                endY = size.height
-                            )
-                            onDrawWithContent {
-                                drawContent()
-                                drawRect(gradient,blendMode = BlendMode.Multiply)
+                        modifier = Modifier
+                            .height(160.dp)
+                            .drawWithCache {
+                                val gradient = Brush.verticalGradient(
+                                    colors = listOf(Color.Transparent, Color.Black),
+                                    startY = size.height / 3,
+                                    endY = size.height
+                                )
+                                onDrawWithContent {
+                                    drawContent()
+                                    drawRect(gradient, blendMode = BlendMode.Multiply)
+                                }
                             }
-                        }
                     )
 
                     Text(
@@ -155,9 +159,11 @@ fun MainInfo(match: MatchDomain, onNotificationOnClick: NotificationOnClick) {
                             color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
                         ),
-                        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(8.dp),
                     )
-    
+
                     Notification(match, onNotificationOnClick)
                 }
             }
@@ -174,7 +180,7 @@ fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
             .padding(16.dp)
     ) {
         val drawable = if (match.notificationEnabled) R.drawable.ic_notifications_active
-            else R.drawable.ic_notifications
+        else R.drawable.ic_notifications
 
         Image(
             painter = painterResource(id = drawable),
@@ -252,7 +258,7 @@ fun TeamItem(team: TeamDomain, invert: Boolean = false) {
                 color = Color.White,
             )
         )
-        
+
         Spacer(modifier = Modifier.size(8.dp))
 
         Text(
