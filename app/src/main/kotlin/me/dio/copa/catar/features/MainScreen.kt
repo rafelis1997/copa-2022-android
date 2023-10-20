@@ -65,7 +65,7 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
         ) {
             Text(
                 text = "Copa do Mundo",
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.onBackground,
