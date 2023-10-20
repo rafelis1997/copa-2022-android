@@ -86,7 +86,7 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationOnClick: NotificationOn
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 48.dp)
+                    .padding(bottom = 48.dp, top = 24.dp)
             )
         }
 
